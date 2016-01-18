@@ -48,10 +48,14 @@ public class PrimeVaccinationScheduleDto {
                 break;
             }
         }
-        for (VisitBookingDetails bookingDetails : details.getSubjectBookingDetails().getVisitBookingDetailsList()) {
-            if (VisitType.SCREENING.equals(bookingDetails.getVisit().getType())) {
-                setBookingScreeningActualDate(bookingDetails.getBookingActualDate());
-                break;
+        if (actualScreeningDate != null) {
+            setBookingScreeningActualDate(actualScreeningDate);
+        } else {
+            for (VisitBookingDetails bookingDetails : details.getSubjectBookingDetails().getVisitBookingDetailsList()) {
+                if (VisitType.SCREENING.equals(bookingDetails.getVisit().getType())) {
+                    setBookingScreeningActualDate(bookingDetails.getBookingActualDate());
+                    break;
+                }
             }
         }
 
@@ -64,7 +68,7 @@ public class PrimeVaccinationScheduleDto {
         setVisitId(details.getVisit().getId());
         setParticipantGender(details.getSubject().getGender());
         if (details.getClinic() != null) {
-            setLocation(details.getClinic().getLocation());
+            setLocation(details.getSubject().getSiteName());
         }
     }
 

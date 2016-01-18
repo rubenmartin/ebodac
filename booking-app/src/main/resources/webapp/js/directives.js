@@ -310,6 +310,7 @@
             rowExtraData.siteId = rowObject.siteId;
             rowExtraData.visitId = rowObject.visitId;
             rowExtraData.participantGender = rowObject.participantGender;
+            rowExtraData.actualScreeningDate = rowObject.actualScreeningDate;
 
             gridDataExtension[options.rowId] = rowExtraData;
 
@@ -337,7 +338,7 @@
                     colModel: [
                         {
                             name: "location",
-                            index: 'clinic.location'
+                            index: 'subject.siteName'
                         },
                         {
                             name: "participantId",
@@ -401,13 +402,12 @@
                         if (iCol !== 7) {
                             var rowData = elem.getRowData(rowId),
                                 extraRowData = gridDataExtension[rowId];
-
                             scope.newForm("edit");
                             scope.form.dto.visitBookingDetailsId = extraRowData.visitBookingDetailsId;
                             scope.form.dto.participantId = rowData.participantId;
                             scope.form.dto.participantName = rowData.participantName;
                             scope.form.dto.femaleChildBearingAge = rowData.femaleChildBearingAge;
-                            scope.form.dto.actualScreeningDate = rowData.actualScreeningDate;
+                            scope.form.dto.actualScreeningDate = extraRowData.actualScreeningDate;
                             scope.form.dto.bookingScreeningActualDate = rowData.bookingScreeningActualDate;
                             scope.form.dto.date = rowData.date;
                             scope.form.dto.startTime = rowData.startTime;
@@ -450,8 +450,7 @@
         var gridDataExtension;
 
         function createButton(id) {
-            return '<button type="button" class="btn btn-primary btn-sm ng-binding printBtn" ng-click="print(' +
-                               id + ')"><i class="fa fa-fw fa-print"></i></button>';
+            return '<button type="button" class="btn btn-primary btn-sm ng-binding printBtn" ng-click="print()"><i class="fa fa-fw fa-print"></i></button>';
         };
 
         function extendGrid(cellValue, options, rowObject) {
@@ -490,7 +489,7 @@
                     colModel: [
                         {
                             name: "location",
-                            index: 'clinic.location'
+                            index: 'subject.siteName'
                         },
                         {
                             name: "participantId",
@@ -552,12 +551,19 @@
                         gridDataExtension = [];
                     },
                     onCellSelect: function(rowId, iCol, cellContent, e) {
-                        if (iCol !== 7) {
+                        if (iCol !== 8) {
                             var rowData = elem.getRowData(rowId),
                                 extraRowData = gridDataExtension[rowId];
 
-                            if ((rowData.actualDate === undefined || rowData.actualDate === null || rowData.actualDate === "")
-                                && extraRowData.earliestDate !== undefined && extraRowData.earliestDate !== null && extraRowData.earliestDate !== "") {
+                            if (rowData.actualDate !== undefined && rowData.actualDate !== null && rowData.actualDate !== '') {
+                                scope.visitForPrint = elem.getRowData(rowId);
+                                scope.form = null;
+                                scope.showRescheduleModal(scope.msg('bookingApp.visitReschedule.cannotReschedule'), scope.msg('bookingApp.visitReschedule.visitWithActualDate'));
+                            } else if (extraRowData.earliestDate === undefined || extraRowData.earliestDate === null || extraRowData.earliestDate === "") {
+                                scope.visitForPrint = elem.getRowData(rowId);
+                                scope.form = null;
+                                scope.showRescheduleModal(scope.msg('bookingApp.visitReschedule.cannotReschedule'), scope.msg('bookingApp.visitReschedule.visitNotInRescheduleWindow'));
+                            } else {
                                 scope.newForm();
                                 scope.form.dto.participantId = rowData.participantId;
                                 scope.form.dto.participantName = rowData.participantName;
@@ -569,8 +575,10 @@
                                 scope.form.dto.visitBookingDetailsId = extraRowData.visitBookingDetailsId;
                                 scope.form.dto.minDate = scope.parseDate(extraRowData.earliestDate);
                                 scope.form.dto.maxDate = scope.parseDate(extraRowData.latestDate);
-                                scope.showRescheduleModal();
+                                scope.showRescheduleModal(scope.msg('bookingApp.visitReschedule.update'), scope.msg('bookingApp.visitReschedule.updateSuccessful'));
                             }
+                        } else {
+                            scope.visitForPrint = elem.getRowData(rowId);
                         }
                     },
                     postData: {

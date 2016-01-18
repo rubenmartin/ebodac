@@ -14,7 +14,10 @@ import org.motechproject.bookingapp.repository.VisitBookingDetailsDataService;
 import org.motechproject.bookingapp.service.PrimeVaccinationScheduleService;
 import org.motechproject.bookingapp.web.domain.BookingGridSettings;
 import org.motechproject.commons.date.model.Time;
+import org.motechproject.ebodac.domain.Subject;
+import org.motechproject.ebodac.domain.Visit;
 import org.motechproject.ebodac.domain.VisitType;
+import org.motechproject.ebodac.repository.SubjectDataService;
 import org.motechproject.ebodac.repository.VisitDataService;
 import org.motechproject.ebodac.service.LookupService;
 import org.motechproject.ebodac.util.QueryParamsBuilder;
@@ -40,6 +43,9 @@ public class PrimeVaccinationScheduleServiceImpl implements PrimeVaccinationSche
 
     @Autowired
     private VisitLimitationHelper visitLimitationHelper;
+
+    @Autowired
+    private SubjectDataService subjectDataService;
 
     @Autowired
     private VisitDataService visitDataService;
@@ -79,6 +85,7 @@ public class PrimeVaccinationScheduleServiceImpl implements PrimeVaccinationSche
     @Override
     public List<PrimeVaccinationScheduleDto> getPrimeVaccinationScheduleRecords() {
         List<PrimeVaccinationScheduleDto> primeVacDtos = new ArrayList<>();
+        createEmptyVisitsForSubjectWithoutPrimeVacDate();
         List<VisitBookingDetails> detailsList = visitBookingDetailsDataService
                 .findByParticipantNamePrimeVaccinationDateAndVisitTypeAndBookingPlannedDateEq(".", null, VisitType.PRIME_VACCINATION_DAY, null);
 
@@ -141,10 +148,10 @@ public class PrimeVaccinationScheduleServiceImpl implements PrimeVaccinationSche
             }
 
             if (visits.size() >= maxVisits) {
-                throw new LimitationExceededException("Maximum amount of Prime Vaccination Visits exceeded for this day");
+                throw new LimitationExceededException("The limit of the type of the visit is reached for this day");
             }
             if (patients >= numberOfRooms) {
-                throw new LimitationExceededException("Too many Patients at the same time");
+                throw new LimitationExceededException("Too many visits at the same time");
             }
         }
     }
@@ -182,6 +189,26 @@ public class PrimeVaccinationScheduleServiceImpl implements PrimeVaccinationSche
             }
         }
         return null;
+    }
+
+    private void createEmptyVisitsForSubjectWithoutPrimeVacDate() {
+        List<Subject> subjects = subjectDataService.findByPrimerVaccinationDate(null);
+        for (Subject subject : subjects) {
+            Visit screeningVisit = visitDataService.findBySubjectIdAndType(subject.getSubjectId(), VisitType.SCREENING);
+            Visit primeVisit = visitDataService.findBySubjectIdAndType(subject.getSubjectId(), VisitType.PRIME_VACCINATION_DAY);
+            if (screeningVisit == null) {
+                screeningVisit = new Visit();
+                screeningVisit.setType(VisitType.SCREENING);
+                screeningVisit.setSubject(subject);
+                visitDataService.create(screeningVisit);
+            }
+            if (primeVisit == null) {
+                primeVisit = new Visit();
+                primeVisit.setSubject(subject);
+                primeVisit.setType(VisitType.PRIME_VACCINATION_DAY);
+                visitDataService.create(primeVisit);
+            }
+        }
     }
 
     private Time calculateEndTime(Time startTime) {

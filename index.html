@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ebodac by rubenmartin</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Ebodac</h1>
+        <p>EBODAC Registration Module</p>
+        <p class="view"><a href="https://github.com/rubenmartin/ebodac">View the Project on GitHub <small>rubenmartin/ebodac</small></a></p>
+        <ul>
+          <li><a href="https://github.com/rubenmartin/ebodac/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/rubenmartin/ebodac/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/rubenmartin/ebodac">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>
+<a id="synopsis" class="anchor" href="#synopsis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Synopsis</h2>
+
+<p><strong>EBODAC</strong> is an open source project created for Clinical Trials, built on the MOTECH platform. It has been deployed for an <strong>EBOLA Vaccine Trial</strong> to run in Sierra Leone.</p>
+
+<p>More information on the MOTECH platform is available at the <a href="http://motechproject.org">Motech Project Website</a>. </p>
+
+<h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>This project provides a framework for implementing clinical trials on the MOTECH Platform. Project partners include the <a href="http://www.grameenfoundation.org/">Grameen Foundation</a> and <a href="www.soldevelo.com">SolDevelo</a>. The EBODAC project is a specific implemntation of MOTECH, allowing for information collection, scheduling and tracking of randomized clinical vaccine trials.</p>
+
+<h2>
+<a id="installation-linux--mac--windows" class="anchor" href="#installation-linux--mac--windows" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation (Linux / Mac / Windows)</h2>
+
+<h3>
+<a id="motech-platform-installation" class="anchor" href="#motech-platform-installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motech Platform Installation</h3>
+
+<p>To install <strong>EBODAC</strong>, you need to first install the <a href="http://docs.motechproject.org/en/latest/get_started/installing.html">Motech Platform</a>. Note that EBODAC is built for MOTECH version 0.27.X.</p>
+
+<p>Developer documentation is also available <a href="http://docs.motechproject.org/en/latest/development/dev_setup/dev_install.html">here</a>, if you'd prefer to build MOTECH yourself.</p>
+
+<h3>
+<a id="ebodac-module-dependencies" class="anchor" href="#ebodac-module-dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>EBODAC Module Dependencies</h3>
+
+<p>The EBODAC module depends on the MOTECH SMS, IVR, Message-Campaign and CSD modules. You can install them from the Manage Modules section on MOTECH's admin page. Alternatively, you can build each module as described below:</p>
+
+<p><code>$ git clone https://github.com/motech/modules.git -b 0.27.x --single-branch</code></p>
+
+<p>After cloning the repository, you'll need to enter the modules directory and build each module.</p>
+
+<p><code>$ cd modules</code></p>
+
+<p>How to install SMS module:</p>
+
+<p><code>$ cd sms</code>
+<code>$mvn clean install -Dmaven.test.skip=true</code></p>
+
+<p>How to install IVR module:</p>
+
+<p><code>$ cd ../ivr</code>
+<code>$ mvn clean install -Dmaven.test.skip=true</code></p>
+
+<p>How to install Message-Campaign module:</p>
+
+<p><code>$ cd ../message-campaign</code>
+<code>$ mvn clean install -Dmaven.test.skip=true</code></p>
+
+<p>How to install Care Services Discovery module:</p>
+
+<p><code>$ cd ../csd</code>
+<code>$ mvn clean install -Dmaven.test.skip=true</code></p>
+
+<h3>
+<a id="ebodac-module-installation" class="anchor" href="#ebodac-module-installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>EBODAC Module Installation</h3>
+
+<p>The EBODAC module can be found in our nexus repository. The easiest way to install it is to download  <a href="http://nexus.motechproject.org/service/local/artifact/maven/redirect?r=releases&amp;g=org.motechproject&amp;a=ebodac&amp;v=RELEASE&amp;e=jar">the jar</a> into the .motech/bundles directory and restart tomcat. If you choose to build the module yourself, it's located in the motech-implementations GitHub repository. Return to your home directory and clone the repo.</p>
+
+<p><code>$ git clone https://github.com/motech-implementations/ebodac.git</code></p>
+
+<p>Enter the EBODAC folder and install the module:</p>
+
+<p><code>$ cd ebodac</code>
+<code>$ mvn clean install -Dmaven.test.skip=true</code></p>
+
+<p>Once complete, you'll want to copy your .motech/bundles directory into your production environment and restart tomcat.</p>
+
+<h3>
+<a id="tests" class="anchor" href="#tests" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tests</h3>
+
+<p>Unit and Integration tests can be found at:
+<a href="https://github.com/motech-implementations/ebodac/tree/master/ebodac/src/test/java/org/motechproject/ebodac">Unit Tests &amp; Integration Tests</a> 
+<a href="Booking%20App%20Unit%20Tests%20and%20Integration%20Tests">https://github.com/motech-implementations/ebodac/tree/master/booking-app/src/test</a>
+<a href="UI%20Tests">https://github.com/motech-implementations/ebodac/tree/master/ebodac/src/test/java/org/motechproject/ebodac/uitest</a></p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>We welcome contributions from the open source community. For instructions on how to get started as a MOTECH contributor, please check out the <a href="Contribute">http://docs.motechproject.org/en/latest/contribute/index.html</a> section of our documentation.</p>
+
+<h2>
+<a id="disclaimer-text-required-by-gf-legal-team" class="anchor" href="#disclaimer-text-required-by-gf-legal-team" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimer Text Required By GF Legal Team</h2>
+
+<p>Third party technology may be necessary for use of MOTECH. This agreement does not modify or abridge any rights or obligations you have in open source technology under applicable open source licenses.</p>
+
+<p>Open source technology programs that are separate from MOTECH are provided as a courtesy to you and are licensed solely under the relevant open source license.
+Any distribution by you of code licensed under an open source license, whether alone or with MOTECH, must be under the applicable open source license.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/rubenmartin">rubenmartin</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

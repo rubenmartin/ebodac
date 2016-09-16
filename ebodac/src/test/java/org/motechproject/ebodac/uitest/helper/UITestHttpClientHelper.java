@@ -134,26 +134,30 @@ public class UITestHttpClientHelper extends EbodacHttpClient {
 
     public boolean addParticipant(TestParticipant participant, String user, String password) {
         boolean status = false;
+        String sJSONAddParticipant = "";
         try {
             if (this.getZetesRegistrationURL() != null) {
-                status = sendJson(zetesRegistrationURL, "{\"subjectId\":\"" + participant.getParticipantId() + "\","
-                        + "\"name\":\"" + participant.getName() + "\"," + "\"language\":\"" + participant.getLanguage()
-                        + "\"," + "\"phoneNumber\":\"" + participant.getPhoneNumber() + "\"," + "\"siteId\":\""
+                sJSONAddParticipant = "{\"subjectId\":\"" + participant.getParticipantId() + "\"," + "\"name\":\""
+                        + participant.getName() + "\"," + "\"language\":\"" + participant.getLanguage() + "\","
+                        + "\"phoneNumber\":\"" + participant.getPhoneNumber() + "\"," + "\"siteId\":\""
                         + participant.getSiteId() + "\"," + "\"siteName\":\"" + participant.getSiteName() + "\","
                         + "\"headOfHousehold\":\"" + participant.getHeadOfHousehold() + "\"," + "\"householdName\":\""
                         + participant.getHeadOfHousehold() + "\"," + "\"community\":\"" + participant.getCommunity()
-                        + "\"," + "\"address\":\"" + participant.getAddress() + "\"}", user, password) != null;
+                        + "\"," + "\"address\":\"" + participant.getAddress() + "\"}";
+                status = null != sendJson(zetesRegistrationURL, sJSONAddParticipant, user, password);
             }
         } catch (NullPointerException e) {
             status = false;
-            LOGGER.error("addParticipant - NullPointerException . Reason : " + e.getLocalizedMessage(), e);
+            LOGGER.error("addParticipant - NPE - JSONString: " + sJSONAddParticipant + " . Reason : "
+                    + e.getLocalizedMessage(), e);
 
         } catch (Exception e) {
             status = false;
-            LOGGER.error("addParticipant - Exception . Reason : " + e.getLocalizedMessage(), e);
+            LOGGER.error("addParticipant - Exc. - JSONString: " + sJSONAddParticipant + " . Reason : "
+                    + e.getLocalizedMessage(), e);
 
         }
-
+       
         return status;
     }
 
@@ -188,7 +192,7 @@ public class UITestHttpClientHelper extends EbodacHttpClient {
             LOGGER.error("addVisits - Exception . Reason : " + e.getLocalizedMessage(), e);
 
         }
-
+      
         return status;
 
     }

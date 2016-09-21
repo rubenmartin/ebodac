@@ -1,7 +1,5 @@
 language: java
 jdk:
   - oraclejdk8
-
 script:
   mvn  install -o -Pchrome-remote  -Dserver.url=$STAGING_SERVER -Dlogin.username=$MOTECH_USER -Dlogin.password=$MOTECH_STAGING_PASS -Dadmin.login=$EBODAC_L1_ADMIN_USER  -Dadmin.password=$EBODAC_L1_ADMIN_PASS -Danalyst.login=$EBODAC_L1_ANALYST_USER -Danalyst.password=$EBODAC_L1_ANALYST_PASS
-

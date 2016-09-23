@@ -4,4 +4,4 @@ jdk:
 before_install:
   - sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
 script:
-  mvn  install -X -Pchrome-remote  -Dserver.url=$STAGING_SERVER -Dlogin.username=$MOTECH_USER -Dlogin.password=$MOTECH_STAGING_PASS -Dadmin.login=$EBODAC_L1_ADMIN_USER  -Dadmin.password=$EBODAC_L1_ADMIN_PASS -Danalyst.login=$EBODAC_L1_ANALYST_USER -Danalyst.password=$EBODAC_L1_ANALYST_PASS
+  mvn  install -X -e -Pchrome-remote  -Dserver.url=$STAGING_SERVER -Dlogin.username=$MOTECH_USER -Dlogin.password=$MOTECH_STAGING_PASS -Dadmin.login=$EBODAC_L1_ADMIN_USER  -Dadmin.password=$EBODAC_L1_ADMIN_PASS -Danalyst.login=$EBODAC_L1_ANALYST_USER -Danalyst.password=$EBODAC_L1_ANALYST_PASS

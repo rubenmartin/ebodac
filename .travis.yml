@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
 before_install:
   - sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
-  - "sh -e /etc/init.d/xvfb :0 -ac -screen 0 1024x768x24 &start"
+  - "sh -e /etc/init.d/xvfb start"
   - "wget http://chromedriver.storage.googleapis.com/2.24/chromedriver_linux64.zip"
   - "unzip chromedriver_linux64.zip"
   - "sudo mv chromedriver /usr/bin"
